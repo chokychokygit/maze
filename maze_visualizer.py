@@ -116,7 +116,13 @@ class MazeVisualizer:
             print(f"📁 Visualization saved to: {save_file}")
             plt.close()  # Close the figure to prevent display
         else:
-            plt.show()
+            # Auto-save with timestamp even if no save file specified
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            auto_save_file = f"maze_visualization_{timestamp}.png"
+            plt.savefig(auto_save_file, dpi=300, bbox_inches='tight', 
+                       facecolor='white', edgecolor='none')
+            print(f"📁 Visualization auto-saved to: {auto_save_file}")
+            plt.close()  # Close the figure to prevent display
     
     def _draw_grid_background(self, min_x, max_x, min_y, max_y):
         """Draw background grid cells"""
@@ -299,35 +305,112 @@ class MazeVisualizer:
                       frameon=True, fancybox=True, shadow=True)
 
 
+def quick_visualize(json_file=None, auto_save=True, output_name=None):
+    """
+    Quick visualization function - automatically creates and saves maze plot
+    """
+    # Auto-detect JSON file if not provided
+    if json_file is None:
+        possible_files = ['maze_data.json', 'test_maze_data.json']
+        json_file = None
+        for file in possible_files:
+            if os.path.exists(file):
+                json_file = file
+                break
+        
+        if json_file is None:
+            print("❌ No maze data file found. Looking for:")
+            for file in possible_files:
+                print(f"   - {file}")
+            return None
+    
+    if not os.path.exists(json_file):
+        print(f"❌ File not found: {json_file}")
+        return None
+    
+    try:
+        print(f"🎨 Creating maze visualization from: {json_file}")
+        
+        # Create visualizer
+        visualizer = MazeVisualizer(json_file)
+        
+        # Generate output filename
+        if output_name is None:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            base_name = os.path.splitext(os.path.basename(json_file))[0]
+            output_name = f"{base_name}_plot_{timestamp}.png"
+        
+        # Create visualization - always save to file
+        visualizer.create_visualization(
+            save_file=output_name,
+            show_path=True,
+            show_visit_counts=True,
+            show_dead_ends=True
+        )
+        
+        print("✅ Visualization complete!")
+        return output_name
+        
+    except Exception as e:
+        print(f"❌ Error creating visualization: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def main():
     """Main function with command line interface"""
     parser = argparse.ArgumentParser(description='Visualize maze exploration data from JSON file')
-    parser.add_argument('json_file', nargs='?', default='maze_data.json', 
-                       help='Path to JSON file containing maze data (default: maze_data.json)')
-    parser.add_argument('--save', '-s', help='Save visualization to file')
+    parser.add_argument('json_file', nargs='?', default=None, 
+                       help='Path to JSON file containing maze data (auto-detects if not specified)')
+    parser.add_argument('--save', '-s', help='Save visualization to specific file')
     parser.add_argument('--no-path', action='store_true', help='Hide robot path')
     parser.add_argument('--no-visits', action='store_true', help='Hide visit counts')
     parser.add_argument('--no-dead-ends', action='store_true', help='Hide dead end markers')
+    parser.add_argument('--quick', '-q', action='store_true', help='Quick mode - auto-detect file and save')
     
     args = parser.parse_args()
     
+    # Quick mode
+    if args.quick:
+        output_file = quick_visualize()
+        if output_file:
+            print(f"🎯 Quick visualization saved to: {output_file}")
+        return
+    
+    # Auto-detect file if not provided
+    json_file = args.json_file
+    if json_file is None:
+        possible_files = ['maze_data.json', 'test_maze_data.json']
+        for file in possible_files:
+            if os.path.exists(file):
+                json_file = file
+                print(f"📂 Auto-detected: {json_file}")
+                break
+        
+        if json_file is None:
+            print("❌ No maze data file found. Looking for:")
+            for file in possible_files:
+                print(f"   - {file}")
+            return
+    
     # Check if file exists
-    if not os.path.exists(args.json_file):
-        print(f"❌ File not found: {args.json_file}")
+    if not os.path.exists(json_file):
+        print(f"❌ File not found: {json_file}")
         print("Please make sure you have run the maze exploration program first.")
         return
     
     try:
         # Create visualizer
-        visualizer = MazeVisualizer(args.json_file)
+        visualizer = MazeVisualizer(json_file)
         
         # Generate output filename if save is requested but no filename provided
         save_file = args.save
         if save_file is True or save_file == '':
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            save_file = f"maze_visualization_{timestamp}.png"
+            base_name = os.path.splitext(os.path.basename(json_file))[0]
+            save_file = f"{base_name}_visualization_{timestamp}.png"
         
-        # Create visualization
+        # Create visualization - will auto-save if no save file specified
         print("🎨 Creating maze visualization...")
         visualizer.create_visualization(
             save_file=save_file,
