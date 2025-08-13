@@ -1927,9 +1927,120 @@ def generate_exploration_report_absolute(graph_mapper, nodes_explored, dead_end_
     
     print(f"\n⭐ ABSOLUTE DIRECTION BENEFITS:")
     
+    # Export maze data to JSON file
+    export_maze_data_to_json(graph_mapper, "maze_data.json")
+    
     print(f"\n{'='*60}")
     print("✅ ABSOLUTE DIRECTION EXPLORATION REPORT COMPLETE")
     print(f"{'='*60}")
+
+
+def export_maze_data_to_json(graph_mapper, filename):
+    """
+    Export maze data (robot path and walls) to JSON file for visualization
+    """
+    try:
+        # Get all positions and find boundaries
+        positions = [node.position for node in graph_mapper.nodes.values()]
+        if not positions:
+            print("❌ No maze data to export")
+            return
+        
+        min_x = min(pos[0] for pos in positions)
+        max_x = max(pos[0] for pos in positions)
+        min_y = min(pos[1] for pos in positions)
+        max_y = max(pos[1] for pos in positions)
+        
+        # Create maze data structure
+        maze_data = {
+            "metadata": {
+                "export_timestamp": datetime.now().isoformat(),
+                "total_nodes_explored": len(graph_mapper.nodes),
+                "boundaries": {
+                    "min_x": min_x,
+                    "max_x": max_x,
+                    "min_y": min_y,
+                    "max_y": max_y,
+                    "width": max_x - min_x + 1,
+                    "height": max_y - min_y + 1
+                },
+                "robot_start_position": (0, 0),
+                "wall_threshold_cm": getattr(graph_mapper, 'WALL_THRESHOLD', 25)
+            },
+            "nodes": {},
+            "robot_path": [],
+            "walls": {},
+            "grid_representation": {}
+        }
+        
+        # Export node data
+        for node_id, node in graph_mapper.nodes.items():
+            maze_data["nodes"][node_id] = {
+                "position": node.position,
+                "walls": node.walls.copy(),
+                "visited": node.visited,
+                "visit_count": node.visitCount,
+                "is_dead_end": node.isDeadEnd,
+                "fully_scanned": getattr(node, 'fullyScanned', False),
+                "last_visited": node.lastVisited,
+                "neighbors": {direction: neighbor.position if neighbor else None 
+                             for direction, neighbor in node.neighbors.items()},
+                "unexplored_exits": node.unexploredExits.copy()
+            }
+        
+        # Create robot path from visited nodes (chronological order)
+        visited_positions = [(0, 0)]  # Start position
+        for node in graph_mapper.nodes.values():
+            if node.position != (0, 0):
+                visited_positions.append(node.position)
+        maze_data["robot_path"] = visited_positions
+        
+        # Create wall data for easier plotting
+        for node in graph_mapper.nodes.values():
+            x, y = node.position
+            for direction, has_wall in node.walls.items():
+                if has_wall:
+                    wall_key = f"{x},{y},{direction}"
+                    maze_data["walls"][wall_key] = {
+                        "position": (x, y),
+                        "direction": direction,
+                        "wall_type": "detected"
+                    }
+        
+        # Create grid representation for easy plotting
+        for y in range(min_y, max_y + 1):
+            for x in range(min_x, max_x + 1):
+                node_id = f"{x},{y}"
+                if node_id in graph_mapper.nodes:
+                    node = graph_mapper.nodes[node_id]
+                    maze_data["grid_representation"][f"{x},{y}"] = {
+                        "explored": True,
+                        "walls": node.walls.copy(),
+                        "visit_count": node.visitCount,
+                        "is_dead_end": node.isDeadEnd
+                    }
+                else:
+                    maze_data["grid_representation"][f"{x},{y}"] = {
+                        "explored": False,
+                        "walls": {"north": True, "south": True, "east": True, "west": True},
+                        "visit_count": 0,
+                        "is_dead_end": False
+                    }
+        
+        # Write to JSON file
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(maze_data, f, indent=2, ensure_ascii=False)
+        
+        print(f"📁 Maze data exported successfully to: {filename}")
+        print(f"   📊 Nodes exported: {len(maze_data['nodes'])}")
+        print(f"   🗺️ Grid size: {maze_data['metadata']['boundaries']['width']}x{maze_data['metadata']['boundaries']['height']}")
+        print(f"   🧱 Walls detected: {len(maze_data['walls'])}")
+        print(f"   🛤️ Path length: {len(maze_data['robot_path'])} positions")
+        
+    except Exception as e:
+        print(f"❌ Error exporting maze data: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 # 4. แก้ไขการตั้งค่า boundary ใน main
