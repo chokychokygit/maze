@@ -1,0 +1,24 @@
+{
+  "robot_settings": {
+    "wall_threshold": 30,
+    "max_nodes": 49,
+    "gimbal_speed": 100,
+    "movement_speed": 50
+  },
+  "map_boundaries": {
+    "min_x": -1,
+    "min_y": -1,
+    "max_x": 1,
+    "max_y": 1
+  },
+  "exploration_settings": {
+    "priority_order": ["left", "front", "right", "back"],
+    "enable_caching": true,
+    "scan_delay": 0.3
+  },
+  "debug_settings": {
+    "verbose_logging": true,
+    "show_boundary_info": true,
+    "show_sensor_readings": true
+  }
+}
