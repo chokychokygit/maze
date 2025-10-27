@@ -1,0 +1,327 @@
+{
+  "metadata": {
+    "export_timestamp": "2024-01-15T10:30:00.000000",
+    "total_nodes_explored": 6,
+    "boundaries": {
+      "min_x": -1,
+      "max_x": 1,
+      "min_y": -1,
+      "max_y": 1,
+      "width": 3,
+      "height": 3
+    },
+    "robot_start_position": [0, 0],
+    "wall_threshold_cm": 25
+  },
+  "nodes": {
+    "0,0": {
+      "position": [0, 0],
+      "walls": {
+        "north": false,
+        "south": false,
+        "east": true,
+        "west": false
+      },
+      "visited": true,
+      "visit_count": 3,
+      "is_dead_end": false,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:25:00.000000",
+      "neighbors": {
+        "north": [0, 1],
+        "south": [0, -1],
+        "east": null,
+        "west": [-1, 0]
+      },
+      "unexplored_exits": []
+    },
+    "0,1": {
+      "position": [0, 1],
+      "walls": {
+        "north": true,
+        "south": false,
+        "east": true,
+        "west": true
+      },
+      "visited": true,
+      "visit_count": 2,
+      "is_dead_end": true,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:26:00.000000",
+      "neighbors": {
+        "north": null,
+        "south": [0, 0],
+        "east": null,
+        "west": null
+      },
+      "unexplored_exits": []
+    },
+    "0,-1": {
+      "position": [0, -1],
+      "walls": {
+        "north": false,
+        "south": true,
+        "east": false,
+        "west": true
+      },
+      "visited": true,
+      "visit_count": 2,
+      "is_dead_end": false,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:27:00.000000",
+      "neighbors": {
+        "north": [0, 0],
+        "south": null,
+        "east": [1, -1],
+        "west": null
+      },
+      "unexplored_exits": []
+    },
+    "-1,0": {
+      "position": [-1, 0],
+      "walls": {
+        "north": true,
+        "south": true,
+        "east": false,
+        "west": true
+      },
+      "visited": true,
+      "visit_count": 1,
+      "is_dead_end": true,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:28:00.000000",
+      "neighbors": {
+        "north": null,
+        "south": null,
+        "east": [0, 0],
+        "west": null
+      },
+      "unexplored_exits": []
+    },
+    "1,-1": {
+      "position": [1, -1],
+      "walls": {
+        "north": false,
+        "south": true,
+        "east": true,
+        "west": false
+      },
+      "visited": true,
+      "visit_count": 1,
+      "is_dead_end": false,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:29:00.000000",
+      "neighbors": {
+        "north": [1, 0],
+        "south": null,
+        "east": null,
+        "west": [0, -1]
+      },
+      "unexplored_exits": []
+    },
+    "1,0": {
+      "position": [1, 0],
+      "walls": {
+        "north": true,
+        "south": false,
+        "east": true,
+        "west": true
+      },
+      "visited": true,
+      "visit_count": 1,
+      "is_dead_end": true,
+      "fully_scanned": true,
+      "last_visited": "2024-01-15T10:30:00.000000",
+      "neighbors": {
+        "north": null,
+        "south": [1, -1],
+        "east": null,
+        "west": null
+      },
+      "unexplored_exits": []
+    }
+  },
+  "robot_path": [
+    [0, 0],
+    [0, 1],
+    [0, 0],
+    [-1, 0],
+    [0, 0],
+    [0, -1],
+    [1, -1],
+    [1, 0]
+  ],
+  "walls": {
+    "0,0,east": {
+      "position": [0, 0],
+      "direction": "east",
+      "wall_type": "detected"
+    },
+    "0,1,north": {
+      "position": [0, 1],
+      "direction": "north",
+      "wall_type": "detected"
+    },
+    "0,1,east": {
+      "position": [0, 1],
+      "direction": "east",
+      "wall_type": "detected"
+    },
+    "0,1,west": {
+      "position": [0, 1],
+      "direction": "west",
+      "wall_type": "detected"
+    },
+    "0,-1,south": {
+      "position": [0, -1],
+      "direction": "south",
+      "wall_type": "detected"
+    },
+    "0,-1,west": {
+      "position": [0, -1],
+      "direction": "west",
+      "wall_type": "detected"
+    },
+    "-1,0,north": {
+      "position": [-1, 0],
+      "direction": "north",
+      "wall_type": "detected"
+    },
+    "-1,0,south": {
+      "position": [-1, 0],
+      "direction": "south",
+      "wall_type": "detected"
+    },
+    "-1,0,west": {
+      "position": [-1, 0],
+      "direction": "west",
+      "wall_type": "detected"
+    },
+    "1,-1,south": {
+      "position": [1, -1],
+      "direction": "south",
+      "wall_type": "detected"
+    },
+    "1,-1,east": {
+      "position": [1, -1],
+      "direction": "east",
+      "wall_type": "detected"
+    },
+    "1,0,north": {
+      "position": [1, 0],
+      "direction": "north",
+      "wall_type": "detected"
+    },
+    "1,0,east": {
+      "position": [1, 0],
+      "direction": "east",
+      "wall_type": "detected"
+    },
+    "1,0,west": {
+      "position": [1, 0],
+      "direction": "west",
+      "wall_type": "detected"
+    }
+  },
+  "grid_representation": {
+    "-1,-1": {
+      "explored": false,
+      "walls": {
+        "north": true,
+        "south": true,
+        "east": true,
+        "west": true
+      },
+      "visit_count": 0,
+      "is_dead_end": false
+    },
+    "-1,0": {
+      "explored": true,
+      "walls": {
+        "north": true,
+        "south": true,
+        "east": false,
+        "west": true
+      },
+      "visit_count": 1,
+      "is_dead_end": true
+    },
+    "-1,1": {
+      "explored": false,
+      "walls": {
+        "north": true,
+        "south": true,
+        "east": true,
+        "west": true
+      },
+      "visit_count": 0,
+      "is_dead_end": false
+    },
+    "0,-1": {
+      "explored": true,
+      "walls": {
+        "north": false,
+        "south": true,
+        "east": false,
+        "west": true
+      },
+      "visit_count": 2,
+      "is_dead_end": false
+    },
+    "0,0": {
+      "explored": true,
+      "walls": {
+        "north": false,
+        "south": false,
+        "east": true,
+        "west": false
+      },
+      "visit_count": 3,
+      "is_dead_end": false
+    },
+    "0,1": {
+      "explored": true,
+      "walls": {
+        "north": true,
+        "south": false,
+        "east": true,
+        "west": true
+      },
+      "visit_count": 2,
+      "is_dead_end": true
+    },
+    "1,-1": {
+      "explored": true,
+      "walls": {
+        "north": false,
+        "south": true,
+        "east": true,
+        "west": false
+      },
+      "visit_count": 1,
+      "is_dead_end": false
+    },
+    "1,0": {
+      "explored": true,
+      "walls": {
+        "north": true,
+        "south": false,
+        "east": true,
+        "west": true
+      },
+      "visit_count": 1,
+      "is_dead_end": true
+    },
+    "1,1": {
+      "explored": false,
+      "walls": {
+        "north": true,
+        "south": true,
+        "east": true,
+        "west": true
+      },
+      "visit_count": 0,
+      "is_dead_end": false
+    }
+  }
+}
